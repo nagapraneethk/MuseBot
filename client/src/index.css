@@ -52,3 +52,20 @@
 .loader-square:nth-of-type(5) { animation-delay: -7.1428571429s; }
 .loader-square:nth-of-type(6) { animation-delay: -8.5714285714s; }
 
+
+
+
+  .slider-track {
+    width: calc(250px * 14);
+    display: flex;
+  }
+
+  .slide {
+    height: 150px;
+    width: 250px;
+    object-fit: cover;
+  }
+
+  .animate-scroll {
+    animation: scroll 40s linear infinite;
+  }
