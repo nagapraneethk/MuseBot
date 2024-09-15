@@ -15,7 +15,7 @@ const LanguageSelector = () => {
     <div className='relative text-white justify-center items-center'>
       <div
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        className='flex gap-5 justify-between items-start px-5 py-3.5 mt-2 font-semibold whitespace-nowrap rounded-3xl border-2 border-solid bg-neutral-700 border-neutral-800 max-md:pl-5 max-md:mr-1 cursor-pointer'
+        className='flex gap-5 justify-between items-center px-5 py-3 mt-4 font-semibold whitespace-nowrap rounded-3xl border-2 border-solid bg-neutral-700 border-neutral-800 max-md:pl-5 max-md:mr-1 cursor-pointer'
       >
         <div className='flex gap-3'>
           <img

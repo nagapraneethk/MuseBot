@@ -1,188 +1,237 @@
 import Header from "./Navbar";
 import { useState, useEffect, useRef } from "react";
 import Tickets from "../BookTickets/TicketHistory";
+import MuseumBooking from "../MuseumBooking/MuseumBooking";
+import React from "react";
+import TicketCard from "../TicketGenerated/TicketCard";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react";
 
-const MainContent = () => {
-  const [inputText, setInputText] = useState("");
-  const [messages, setMessages] = useState([]);
-  const messagesEndRef = useRef(null);
+const MainContent = ({ isOpen }) => {
+	const [inputText, setInputText] = useState("");
+	const [messages, setMessages] = useState([]);
+	const [eventDetailsSelected, seEventDetailsSelected] = useState([]);
+	const [userDetails, setUserDetails] = useState([]);
+	const messagesEndRef = useRef(null);
 
+	const handleSend = (messageText) => {
+		setMessages((prevMessages) => [
+			...prevMessages,
+			{ sender: "user", text: messageText || inputText },
+		]);
 
-  const handleSend = (messageText) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { sender: "user", text: messageText || inputText }
-    ]);
+		setTimeout(() => {
+			if (messageText === "Book Tickets" || inputText === "Book Tickets") {
+				setMessages((prevMessages) => [
+					...prevMessages,
+					{ sender: "bot", text: "Here are the available shows:", id: 1 },
+				]);
+			} else {
+				setMessages((prevMessages) => [
+					...prevMessages,
+					{
+						sender: "bot",
+						text: "I'm not sure how to respond to that.",
+						id: 0,
+					},
+				]);
+			}
+		}, 1000);
 
-    setTimeout(() => {
-      if (messageText === "1" || inputText === "1") {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: "bot", text: "1 (From other end)" }
-        ]);
-      } else if (messageText === "2" || inputText === "2") {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: "bot", text: "2 (From other end)" }
-        ]);
-      } else {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: "bot", text: "Zuhahahahah", id: 1 }
-        ]);
-      }
-    }, 1000);
+		setInputText("");
+	};
 
-    setInputText("");
-  };
+	const handleButtonClick = (text) => {
+		handleSend(text);
+	};
 
-  const handleButtonClick = (text) => {
-    handleSend(text);
-  };
+	const handleBooking = (eventDetails) => {
+		console.log(eventDetails)
+		seEventDetailsSelected(eventDetails);
+		setMessages((prevMessages) => [
+			...prevMessages,
+			{
+				sender: "user",
+				text: `I'd like to book tickets for "${eventDetails.title}"`,
+			},
+			
+		]);
+		setTimeout(() => {
+			setMessages((prevMessages) => [
+				...prevMessages,
+				{
+					sender: "bot",
+					text: "Great! Let's proceed with your booking.",
+					id: 2,
+					eventDetails: eventDetails,
+				},
+			]);
+		},1000)
+	};
+	const handleTicketBooking = (ticketDetails) => {
+		console.log("props", ticketDetails);
+		setUserDetails(ticketDetails)
+		setMessages((prevMessages) => [
+			...prevMessages,
+			{
+				sender: "user",
+				text: `I'd like to confirm the ticket for "${eventDetailsSelected?.title || "Ticket Dummy"}"`,
+			},
+		]);
+		setTimeout(() => {
+			setMessages((prevMessages) => [
+				...prevMessages,
+				{
+					sender: "bot",
+					text: "Great! Your ticket has been booked. Here are the details:",
+					id: 3,
+					ticketDetails: ticketDetails,
+				},
+			]);
+		}, 1000);
+	};
 
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+	const scrollToBottom = () => {
+		if (messagesEndRef.current) {
+			messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+		}
+	};
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+	useEffect(() => {
+		scrollToBottom();
+	}, [messages]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleSend(inputText);
-  };
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		handleSend(inputText);
+	};
 
-  return (
-    <div className="flex flex-col w-[80%] max-md:ml-0 max-md:w-full">
-      <div className="flex flex-col px-4 py-5 mx-auto w-full rounded-3xl bg-zinc-800 max-md:pr-5 max-md:mt-10 max-md:max-w-full h-[95vh] relative">
-        <Header />
-        <div className="h-[70vh] overflow-y-auto">
-          <div className="flex flex-wrap gap-5 justify-between mt-3 text-white max-md:max-w-full">
-            <div className="flex flex-col">
-              <div className="flex flex-col items-start px-5 pt-5 pb-4 w-full text-xs font-semibold rounded-md bg-neutral-700 max-md:ml-2.5">
-                <div className="self-stretch text-base font-medium">
-                  Hello, in what ways can I help you? Kindly select one of the
-                  options below.
-                </div>
-                <div className="flex gap-10 mt-8">
-                  <button
-                    className="px-5 py-6 rounded-md shadow-sm bg-zinc-800 max-md:pr-5"
-                    onClick={() => handleButtonClick("Book Tickets")}
-                  >
-                    Book Tickets
-                  </button>
-                  <button
-                    className="px-2.5 pt-5 pb-8 rounded-md shadow-sm bg-zinc-800"
-                    onClick={() => handleButtonClick("Available Shows")}
-                  >
-                    Available Shows
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-4 self-end w-full">
-              {messages.map((message, index) => {
-                if (message.sender !== "user") {
-                  switch (message.id) {
+	return (
+		<div
+			className={`flex flex-col ${
+				isOpen ? "w-[78%]" : "w-[94%]"
+			} max-md:ml-0 max-md:w-full fixed top-6 right-6`}
+		>
+			<div className='flex flex-col px-4 py-5 mx-auto w-full rounded-3xl bg-zinc-800 max-md:pr-5 max-md:mt-10 max-md:max-w-full h-[95vh] relative'>
+				<Header />
+				<div className='h-[72vh] overflow-y-auto'>
+					<div className='flex flex-wrap gap-5 justify-between mt-3 text-white max-md:max-w-full'>
+						<div className='flex flex-col'>
+							<div className='flex flex-col items-start px-5 pt-5 pb-4 w-full text-xs font-semibold rounded-3xl bg-neutral-700 max-md:ml-2.5 rounded-tl-[2px] '>
+								<div className='text-base font-medium max-w-52 '>
+									Hello, in what ways can I help you? Kindly select one of the
+									options below.
+								</div>
+								<div className='grid grid-cols-2 gap-4 mt-4'>
+									<SignedOut>
+										<SignInButton mode='modal'>
+											<button className='px-5 py-4 rounded-md shadow-sm bg-zinc-800 max-md:pr-5'>
+												Sign In to Book Tickets
+											</button>
+										</SignInButton>
+									</SignedOut>
 
-                    case 1:
-                      return (
-                        <>
-                          <div
-                            key={index}
-                            className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
-                          >
-                            Below are the shows available
-                          </div>
-                          <Tickets />
-                        </>
-
-                      );
-                    case 2:
-                      return (
-                        <div
-                          key={index}
-                          className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
-                        >
-                          Component 2 Content
-                        </div>
-                      );
-                    case 3:
-                      return (
-                        <div
-                          key={index}
-                          className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
-                        >
-                          Component 3 Content
-                        </div>
-                      );
-                    case 4:
-                      return (
-                        <div
-                          key={index}
-                          className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
-                        >
-                          Component 4 Content
-                        </div>
-                      );
-                    case 5:
-                      return (
-                        <div
-                          key={index}
-                          className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
-                        >
-                          Component 5 Content
-                        </div>
-                      );
-                    default:
-                      return (
-                        <div
-                          key={index}
-                          className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
-                        >
-                          {message.text}
-                        </div>
-                      );
-                  }
-                } else {
-                  return (
-                    <div
-                      key={index}
-                      className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-700 self-end mr-2 rounded-tr-[5px]`}
-                    >
-                      {message.text}
-                    </div>
-                  );
-                }
-              })}
-
-              <div ref={messagesEndRef} />
-            </div>
-          </div>
-        </div>
-        <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 mr-6 py-3 text-base font-medium text-center text-zinc-300 text-opacity-80 max-md:mr-2.5 absolute bottom-3 bg-neutral-800 w-fit">
-          <input
-            type="text"
-            className="px-7 py-4 bg-neutral-600 bg-opacity-50 rounded-[30px] max-md:px-5 w-[15rem] sm:w-[54rem] 2xl:w-[66rem]"
-            placeholder="Message Hi to start"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-          />
-          <button>
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/f5052bfd2170575807d11e31a541fbdd82dff05338276b17faf9f0f534793aab?placeholderIfAbsent=true&apiKey=61fdf683f141495eb249129d739ec110"
-              alt="Send message"
-              className="object-contain shrink-0 my-auto w-12 aspect-square"
-            />
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+									<SignedIn>
+										<button
+											className='px-5 py-4 rounded-md shadow-sm bg-zinc-800 max-md:pr-5'
+											onClick={() => handleButtonClick("Book Tickets")}
+										>
+											Book Tickets
+										</button>
+									</SignedIn>
+								</div>
+							</div>
+						</div>
+						<div className='flex flex-col gap-4 self-end w-full'>
+							{messages.map((message, index) => {
+								if (message.sender !== "user") {
+									switch (message.id) {
+										case 1:
+											return (
+												<React.Fragment key={index}>
+													<div
+														className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
+													>
+														{message.text}
+													</div>
+													<Tickets onBooking={handleBooking} />
+												</React.Fragment>
+											);
+										case 2:
+											return (
+												<React.Fragment key={index}>
+													<div
+														className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
+													>
+														{message.text}
+													</div>
+													<MuseumBooking
+														// eventDetails={message.eventDetails}
+														onTicketBook={handleTicketBooking}
+													/>
+												</React.Fragment>
+											);
+										case 3:
+											return (
+												<React.Fragment key={index}>
+													<div
+														className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
+													>
+														{message.text}
+													</div>
+													<TicketCard
+														eventDetails={eventDetailsSelected}
+														userDetails={userDetails}
+													/>
+												</React.Fragment>
+											);
+										default:
+											return (
+												<div
+													key={index}
+													className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-600 self-start rounded-tl-[5px]`}
+												>
+													{message.text}
+												</div>
+											);
+									}
+								} else {
+									return (
+										<div
+											key={index}
+											className={`px-7 py-4 text-base font-medium rounded-3xl max-md:px-5 max-md:mt-10 bg-neutral-700 self-end mr-2 rounded-tr-[5px]`}
+										>
+											{message.text}
+										</div>
+									);
+								}
+							})}
+							<div ref={messagesEndRef} />
+						</div>
+					</div>
+				</div>
+				<form
+					onSubmit={handleSubmit}
+					className='flex items-center justify-between gap-4 w-full absolute bottom-3'
+				>
+					<input
+						type='text'
+						className='px-7 py-4 bg-neutral-600 bg-opacity-50 rounded-[30px] max-md:px-5 flex-grow'
+						placeholder='Message Hi to start'
+						value={inputText}
+						onChange={(e) => setInputText(e.target.value)}
+					/>
+					<button type='submit' className='flex-shrink-0'>
+						<img
+							loading='lazy'
+							src='https://cdn.builder.io/api/v1/image/assets/TEMP/f5052bfd2170575807d11e31a541fbdd82dff05338276b17faf9f0f534793aab?placeholderIfAbsent=true&apiKey=61fdf683f141495eb249129d739ec110'
+							alt='Send message'
+							className='object-contain w-12 aspect-square'
+						/>
+					</button>
+				</form>
+			</div>
+		</div>
+	);
 };
 
 export default MainContent;
