@@ -10,6 +10,7 @@ const EventCard = ({
 	date,
 	imagePath,
 	onBook,
+	setDate,
 }) => {
 	const { isSignedIn } = useAuth();
 
@@ -45,7 +46,7 @@ const EventCard = ({
 
 				<div className='flex justify-between items-center'>
 					<div className='flex gap-2'>
-						<DateSelector />
+						<DateSelector setDate={setDate} />
 					</div>
 					<SignedOut>
 						<SignInButton mode='modal'>

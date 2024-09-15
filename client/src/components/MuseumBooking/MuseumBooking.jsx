@@ -4,11 +4,13 @@ import BookingHeader from "./BookingHeader";
 import BookingForm from "./BookingForm";
 import TimeSlots from "./TimeSlots";
 
-function MuseumBooking({ onTicketBook }) {
+function MuseumBooking({ onTicketBook, eventDetails }) {
 	const { user } = useUser();
 	const [selectedTime, setSelectedTime] = useState(null);
-
+	const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+    // console.log(eventDetails)
 	const handleTimeSelection = (time) => {
+		// console.log(time)
 		setSelectedTime(time);
 	};
 
@@ -25,12 +27,13 @@ function MuseumBooking({ onTicketBook }) {
 								className='object-cover absolute inset-0 size-full'
 							/>
 							<div className='relative z-10 w-full'>
-								<BookingHeader />
+								<BookingHeader eventDetails={eventDetails} />
 								<BookingForm
 									user={user}
-									date={'27 Sep'}
+									date={date}
 									selectedTime={selectedTime}
 									onTicketBook={onTicketBook}
+									eventDetails={eventDetails}
 								/>
 							</div>
 						</article>

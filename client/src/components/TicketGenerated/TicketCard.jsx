@@ -29,7 +29,7 @@ function TicketCard({ eventDetails, userDetails }) {
 			</header>
 			<img
 				loading='lazy'
-				src='https://cdn.builder.io/api/v1/image/assets/TEMP/db0e82a36bb715dbffd93468a94a77f64a64eb58dbc573791d3de2902c742d85?placeholderIfAbsent=true&apiKey=61fdf683f141495eb249129d739ec110'
+				src="/buttons.svg"
 				alt=''
 				className='object-contain z-10 self-end max-w-full rounded-none aspect-[3.18] w-[118px] max-md:mr-2.5'
 			/>

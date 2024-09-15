@@ -10,7 +10,7 @@ const App = () => {
 		setShowSplash(false);
 	};
 
-	return (
+return (
 		<>
 			{showSplash ? (
 				<SplashScreen onFinish={handleSplashFinish} />

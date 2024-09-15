@@ -1,39 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTimes, FaEdit } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { useUser } from "@clerk/clerk-react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../Redux/userSlice";
 
 const Profile = ({ onClose }) => {
 	const { user } = useUser();
-	const [isEditing, setIsEditing] = useState(false);
+	const dispatch = useDispatch();
+
+	const userProfile = useSelector((state) => state.user);
+	console.log(userProfile)
+    const storedProfile = JSON.parse(localStorage.getItem("userProfile"));
+	const [name, setName] = useState(
+		userProfile?.fullName || user?.fullName ||""
+	);
+	const [email, setEmail] = useState(
+		userProfile?.primaryEmail ||
+			user?.primaryEmailAddress?.emailAddress || ""
+	);
+	const [phone, setPhone] = useState(
+		userProfile?.phone ||
+			user?.primaryPhoneNumber?.phoneNumber ||""
+	);
+
+	useEffect(() => {
+		const storedProfile = JSON.parse(localStorage.getItem("userProfile"));
+		if (storedProfile) {
+			setName(storedProfile.name || "");
+			setEmail(storedProfile.email || "");
+			setPhone(storedProfile.phone || "");
+		}
+	}, []);
+
+	useEffect(() => {
+		const userProfileData = { name, email, phone };
+		localStorage.setItem("userProfile", JSON.stringify(userProfileData));
+
+		dispatch(updateUser(userProfileData));
+	}, [name, email, phone, dispatch]);
 
 	if (!user) {
 		return <div>Loading user data...</div>;
 	}
 
-	const phoneNumber =
-		user.primaryPhoneNumber?.phoneNumber || "No phone number provided";
-
-	const handleEdit = () => {
-		setIsEditing(true);
-		alert("Edit functionality would be implemented here.");
-		setIsEditing(false);
+	const handleEdit = (field, setField) => {
+		const newValue = prompt(`Enter new ${field}:`, field);
+		if (newValue !== null) {
+			setField(newValue); 
+		}
 	};
 
-	const EditableField = ({ label, value, placeholder }) => (
+	const EditableField = ({ label, value, placeholder, setField }) => (
 		<div className='flex justify-between items-center'>
 			<p>
 				<strong>{label}:</strong>{" "}
 				{value || <span className='italic text-gray-500'>{placeholder}</span>}
 			</p>
-			{!value && (
-				<button
-					onClick={handleEdit}
-					className='text-blue-400 hover:text-blue-300'
-				>
-					<FaEdit />
-				</button>
-			)}
+			<button
+				onClick={() => handleEdit(label, setField)}
+				className='text-blue-400 hover:text-blue-300'
+			>
+				<FaEdit />
+			</button>
 		</div>
 	);
 
@@ -55,22 +84,21 @@ const Profile = ({ onClose }) => {
 							/>
 						) : (
 							<div className='w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center'>
-								<FaEdit
-									onClick={handleEdit}
-									className='text-gray-400 cursor-pointer'
-								/>
+								<FaEdit className='text-gray-400 cursor-pointer' />
 							</div>
 						)}
 						<div>
 							<EditableField
 								label='Name'
-								value={user.fullName}
+								value={name}
 								placeholder='Add your name'
+								setField={setName}
 							/>
 							<EditableField
 								label='Email'
-								value={user.primaryEmailAddress?.emailAddress}
+								value={email}
 								placeholder='Add your email'
+								setField={setEmail}
 							/>
 						</div>
 					</div>
@@ -79,15 +107,15 @@ const Profile = ({ onClose }) => {
 						<h4 className='text-lg font-semibold mb-2'>Contact Information</h4>
 						<EditableField
 							label='Phone'
-							value={
-								phoneNumber !== "No phone number provided" ? phoneNumber : ""
-							}
+							value={phone}
 							placeholder='Add your phone number'
+							setField={setPhone}
 						/>
 						<EditableField
 							label='Email'
-							value={user.primaryEmailAddress?.emailAddress}
+							value={email}
 							placeholder='Add your email'
+							setField={setEmail}
 						/>
 					</div>
 
@@ -105,23 +133,6 @@ const Profile = ({ onClose }) => {
 							{new Date(user.updatedAt).toLocaleDateString()}
 						</p>
 					</div>
-
-					{user.publicMetadata &&
-						Object.keys(user.publicMetadata).length > 0 && (
-							<div className='border-t border-gray-700 pt-4'>
-								<h4 className='text-lg font-semibold mb-2'>
-									Additional Information
-								</h4>
-								{Object.entries(user.publicMetadata).map(([key, value]) => (
-									<EditableField
-										key={key}
-										label={key}
-										value={value}
-										placeholder={`Add ${key}`}
-									/>
-								))}
-							</div>
-						)}
 				</div>
 			</div>
 		</div>

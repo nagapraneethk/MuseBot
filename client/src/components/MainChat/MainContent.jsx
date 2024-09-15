@@ -45,7 +45,6 @@ const MainContent = ({ isOpen }) => {
 	};
 
 	const handleBooking = (eventDetails) => {
-		console.log(eventDetails)
 		seEventDetailsSelected(eventDetails);
 		setMessages((prevMessages) => [
 			...prevMessages,
@@ -53,7 +52,6 @@ const MainContent = ({ isOpen }) => {
 				sender: "user",
 				text: `I'd like to book tickets for "${eventDetails.title}"`,
 			},
-			
 		]);
 		setTimeout(() => {
 			setMessages((prevMessages) => [
@@ -65,16 +63,18 @@ const MainContent = ({ isOpen }) => {
 					eventDetails: eventDetails,
 				},
 			]);
-		},1000)
+		}, 1000);
 	};
 	const handleTicketBooking = (ticketDetails) => {
 		console.log("props", ticketDetails);
-		setUserDetails(ticketDetails)
+		setUserDetails(ticketDetails);
 		setMessages((prevMessages) => [
 			...prevMessages,
 			{
 				sender: "user",
-				text: `I'd like to confirm the ticket for "${eventDetailsSelected?.title || "Ticket Dummy"}"`,
+				text: `I'd like to confirm the ticket for "${
+					eventDetailsSelected?.title || "Ticket Dummy"
+				}"`,
 			},
 		]);
 		setTimeout(() => {
@@ -165,7 +165,7 @@ const MainContent = ({ isOpen }) => {
 														{message.text}
 													</div>
 													<MuseumBooking
-														// eventDetails={message.eventDetails}
+														eventDetails={eventDetailsSelected}
 														onTicketBook={handleTicketBooking}
 													/>
 												</React.Fragment>
@@ -211,19 +211,19 @@ const MainContent = ({ isOpen }) => {
 				</div>
 				<form
 					onSubmit={handleSubmit}
-					className='flex items-center justify-between gap-4 w-full absolute bottom-3'
+					className='flex items-center justify-between  w-[98%] gap-2 absolute bottom-3 right-10 left-2'
 				>
 					<input
 						type='text'
-						className='px-7 py-4 bg-neutral-600 bg-opacity-50 rounded-[30px] max-md:px-5 flex-grow'
-						placeholder='Message Hi to start'
+						className='px-4 py-4 bg-neutral-600 bg-opacity-50 rounded-[30px] max-md:px-5 flex-grow text-white'
+						placeholder='Start booking your ticket'
 						value={inputText}
 						onChange={(e) => setInputText(e.target.value)}
 					/>
 					<button type='submit' className='flex-shrink-0'>
 						<img
 							loading='lazy'
-							src='https://cdn.builder.io/api/v1/image/assets/TEMP/f5052bfd2170575807d11e31a541fbdd82dff05338276b17faf9f0f534793aab?placeholderIfAbsent=true&apiKey=61fdf683f141495eb249129d739ec110'
+							src='/send-button.svg'
 							alt='Send message'
 							className='object-contain w-12 aspect-square'
 						/>

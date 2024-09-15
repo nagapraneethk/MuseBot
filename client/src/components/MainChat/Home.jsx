@@ -13,7 +13,6 @@ const EventDashboard = () => {
 				{ date: "28 August", time: "1:00 P.M" },
 				{ date: "8 September", time: "3:00 P.M" },
 				{ date: "28 August", time: "1:00 P.M" },
-				// ... other todo events
 			];
 
 			const doneEvents = [
@@ -21,7 +20,6 @@ const EventDashboard = () => {
 				{ date: "28 August", time: "1:00 P.M" },
 				{ date: "8 September", time: "3:00 P.M" },
 				{ date: "28 August", time: "1:00 P.M" },
-				// ... other done events
 			];
 		const [isOpen, setIsOpen] = useState(true);
 
