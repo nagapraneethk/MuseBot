@@ -23,9 +23,9 @@ const Sidebar = ({ todoEvents, doneEvents, isOpen, setIsOpen }) => {
 	);
 
 	return (
-		<div className='relative h-screen'>
+		<div className='relative h-screen sidebar'>
 			<div
-				className={`fixed top-6 bottom-6 left-6 bg-neutral-800 text-gray-100 transition-all duration-300 ease-in-out ${
+				className={`sidebar fixed top-6 bottom-6 left-6 bg-neutral-800 text-gray-100 transition-all duration-300 ease-in-out ${
 					isOpen ? "w-80" : "w-12 bg-black"
 				} rounded-[20px] overflow-hidden flex flex-col`}
 			>
@@ -33,7 +33,7 @@ const Sidebar = ({ todoEvents, doneEvents, isOpen, setIsOpen }) => {
 					{isOpen && <h2 className='text-xl font-semibold'>Popular Shows</h2>}
 				</div>
 				{isOpen && (
-					<div className='flex-grow overflow-y-auto p-4 space-y-5'>
+					<div className='flex-grow overflow-y-auto p-4 space-y-5 PopularShow_bar'>
 						{/* <h1>Show 1</h1> */}
 						<ImageSlider imagePath='/museum-1.png' />
 						{/* <h1>Show 2</h1> */}
@@ -43,7 +43,7 @@ const Sidebar = ({ todoEvents, doneEvents, isOpen, setIsOpen }) => {
 
 						{renderEventList("Events To-Do", todoEvents)}
 
-						<div className='mt-auto pt-8 sticky'>
+						<div className='mt-auto sticky'>
 							<LanguageSelector />
 						</div>
 					</div>

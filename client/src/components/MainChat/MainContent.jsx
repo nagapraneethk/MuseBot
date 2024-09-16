@@ -108,10 +108,11 @@ const MainContent = ({ isOpen }) => {
 	return (
 		<div
 			className={`flex flex-col ${
-				isOpen ? "w-[78%]" : "w-[94%]"
+				isOpen ? "w-[75%]" : "w-[94%]"
 			} max-md:ml-0 max-md:w-full fixed top-6 right-6`}
 		>
-			<div className='flex flex-col px-4 py-5 mx-auto w-full rounded-3xl bg-zinc-800 max-md:pr-5 max-md:mt-10 max-md:max-w-full h-[95vh] relative'>
+			<div className='chat-box flex flex-col px-4 py-5 mx-auto w-full rounded-3xl bg-zinc-800 max-md:pr-5 max-md:mt-10 max-md:max-w-full h-[95vh] relative'>
+			
 				<Header />
 				<div className='h-[72vh] overflow-y-auto'>
 					<div className='flex flex-wrap gap-5 justify-between mt-3 text-white max-md:max-w-full'>
