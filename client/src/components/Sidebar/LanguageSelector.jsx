@@ -2,13 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { updateLanguage } from "../Redux/userSlice";
 
-const LanguageSelector = () => {
+const LanguageSelector = ({todoEvents}) => {
 	const dispatch = useDispatch();
 	const selectedLanguage = useSelector((state) => state.user.language);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const languages = [
+		{ language: "English", code: "en" },
 		{ language: "Hindi", code: "hi" },
 		{ language: "Bengali", code: "bn" },
 		{ language: "Telugu", code: "te" },
@@ -39,7 +40,7 @@ const LanguageSelector = () => {
 	);
 
 	return (
-		<div className='relative text-white justify-center items-center'>
+		<div className={`relative text-white justify-center items-center  mt-30`}>
 			<div
 				onClick={() => setIsDropdownOpen(!isDropdownOpen)}
 				className='flex gap-5 justify-between items-center px-5 py-3 mt-4 font-semibold whitespace-nowrap rounded-3xl border-2 border-solid bg-neutral-700 border-neutral-800 max-md:pl-5 max-md:mr-1 cursor-pointer'
@@ -75,10 +76,7 @@ const LanguageSelector = () => {
 						
 						{filteredLanguages.length > 0 ? (
 							filteredLanguages
-								.filter(
-									(languageObj) =>
-										languageObj.language !== selectedLanguage.language
-								)
+								
 								.map((languageObj, index) => (
 									<li
 										key={index}

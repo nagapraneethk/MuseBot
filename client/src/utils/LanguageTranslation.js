@@ -1,6 +1,6 @@
 import React from "react";
 export const translateText = async (text, targetLanguage) => {
-	const apiKey = "AIzaSyAcTzjWIcw-zZ2Z-fUYGofwgN9Fv_n83CA";
+	const apiKey = "AIzaSyD3482Ae2OvgRaQiy7iCUFKjdp9BrcO_Ik";
 	const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
 
 	const body = {

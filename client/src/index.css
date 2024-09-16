@@ -54,18 +54,6 @@
 
 
 
-
-  .slider-track {
-    width: calc(250px * 14);
-    display: flex;
-  }
-
-  .slide {
-    height: 150px;
-    width: 300px;
-    object-fit: cover;
-  }
-
   .animate-scroll {
     animation: scroll 40s linear infinite;
     

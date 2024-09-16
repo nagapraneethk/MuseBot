@@ -1,6 +1,6 @@
 import Sidebar from "../Sidebar/Sidebar";
 import MainContent from "./MainContent";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const EventDashboard = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -8,23 +8,12 @@ const EventDashboard = () => {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
-      const todoEvents = [
-				{ date: "8 September", time: "3:00 P.M" },
-				{ date: "28 August", time: "1:00 P.M" },
-				{ date: "8 September", time: "3:00 P.M" },
-				{ date: "28 August", time: "1:00 P.M" },
-			];
-
-			const doneEvents = [
-				{ date: "8 September", time: "3:00 P.M" },
-				{ date: "28 August", time: "1:00 P.M" },
-				{ date: "8 September", time: "3:00 P.M" },
-				{ date: "28 August", time: "1:00 P.M" },
-			];
+    const [todoEvents,setTodoEvents]= useState(null)
 		const [isOpen, setIsOpen] = useState(true);
-
+	useEffect(() => {
+		 console.log(todoEvents)
+	},[])
 	
-
     return (
 			<main className='fixed  bg-neutral-900 max-md:px-5 h-screen w-full overflow-hidden'>
 				<div className='home-box flex  max-md:flex-col '>
@@ -32,9 +21,8 @@ const EventDashboard = () => {
 						isOpen={isOpen}
 						setIsOpen={setIsOpen}
 						todoEvents={todoEvents}
-						doneEvents={doneEvents}
 					/>
-					<MainContent isOpen={isOpen} />
+					<MainContent isOpen={isOpen} setTodoEvents={setTodoEvents} />
 				</div>
 			</main>
 		);

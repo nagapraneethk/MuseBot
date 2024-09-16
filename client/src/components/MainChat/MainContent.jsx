@@ -8,7 +8,7 @@ import { SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react";
 import { useSelector } from "react-redux";
 import { translateText } from "../../utils/LanguageTranslation";
 
-const MainContent = ({ isOpen }) => {
+const MainContent = ({ isOpen, setTodoEvents }) => {
 	const [translatedText, setTranslatedText] = useState({});
 	const [inputText, setInputText] = useState("");
 	const [messages, setMessages] = useState([]);
@@ -29,7 +29,7 @@ const MainContent = ({ isOpen }) => {
 					"Hello, in what ways can I help you? Kindly select one of the options below.",
 				signIn: "Sign In to Book Tickets",
 				bookTickets: "Book Tickets",
-				unsureResponse: "I'm not sure how to respond to that.",
+				unsureResponse: "I'm not sure how to respond to that. Please checkout the shows available.",
 				availableShows: "Here are the available shows:",
 				proceedBooking: "Great! Let's proceed with your booking.",
 				confirmBooking:
@@ -83,10 +83,12 @@ const MainContent = ({ isOpen }) => {
 
 	const handleBooking = async (eventDetails) => {
 		setEventDetailsSelected(eventDetails);
+		
+
 		let translatedUserMessage = await translateText(
-			"I'd like to book tickets for " ,
+			"I'd like to book tickets for ",
 			language
-		); 
+		);
 		translatedUserMessage += `"${eventDetails.title}"`;
 
 		setMessages((prevMessages) => [
@@ -109,11 +111,12 @@ const MainContent = ({ isOpen }) => {
 
 	const handleTicketBooking = async (ticketDetails) => {
 		setUserDetails(ticketDetails);
+		setTodoEvents(ticketDetails);
 		let translatedUserMessage = await translateText(
 			`I'd like to confirm the ticket for `,
 			language
 		);
-        translatedUserMessage += `"${eventDetailsSelected.title}"`;
+		translatedUserMessage += `"${eventDetailsSelected.title}"`;
 		setMessages((prevMessages) => [
 			...prevMessages,
 			{ sender: "user", text: translatedUserMessage },
@@ -150,11 +153,10 @@ const MainContent = ({ isOpen }) => {
 	return (
 		<div
 			className={`flex flex-col ${
-				isOpen ? "w-[75%]" : "w-[94%]"
+				isOpen ? "w-[78%]" : "w-[94%]"
 			} max-md:ml-0 max-md:w-full fixed top-6 right-6`}
 		>
 			<div className='chat-box flex flex-col px-4 py-5 mx-auto w-full rounded-3xl bg-zinc-800 max-md:pr-5 max-md:mt-10 max-md:max-w-full h-[95vh] relative'>
-			
 				<Header />
 				<div className='h-[72vh] overflow-y-auto'>
 					<div className='flex flex-wrap gap-5 justify-between mt-3 text-white max-md:max-w-full'>
@@ -263,6 +265,12 @@ const MainContent = ({ isOpen }) => {
 						placeholder={translatedText.inputPlaceholder}
 						value={inputText}
 						onChange={(e) => setInputText(e.target.value)}
+					/>
+					<img
+						loading='lazy'
+						src='/mic2.svg'
+						alt='Send message'
+						className='object-contain w-12 aspect-square'
 					/>
 					<button type='submit' className='flex-shrink-0'>
 						<img
