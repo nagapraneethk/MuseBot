@@ -27,7 +27,7 @@ const EventDashboard = () => {
 
     return (
 			<main className='fixed  bg-neutral-900 max-md:px-5 h-screen w-full overflow-hidden'>
-				<div className='flex  max-md:flex-col '>
+				<div className='home-box flex  max-md:flex-col '>
 					<Sidebar
 						isOpen={isOpen}
 						setIsOpen={setIsOpen}
