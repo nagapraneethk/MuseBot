@@ -80,13 +80,12 @@ const Header = () => {
             </button>
             {isCityDropdownOpen && (
               <div className='absolute left-0 mt-2 w-48 bg-neutral-800 border border-neutral-700 rounded-md shadow-lg'>
-                {/* Search Bar for Cities */}
                 <input
                   type='text'
                   placeholder='Search city...'
                   value={searchTerm}
                   onChange={handleSearchChange}
-                   className='w-full px-4 py-2 bg-neutral-700 text-white border-b border-neutral-600 outline-none focus:ring-1 focus:ring-white-400 focus:ring-opacity-60 rounded-t-md'
+                   className='w-full px-4 py-2 bg-neutral-900 text-white border-b border-neutral-600 outline-none focus:ring-1 focus:ring-white-400 focus:ring-opacity-60 rounded-t-md'
                 />
                 <ul>
                   {filteredCities.length > 0 ? (
