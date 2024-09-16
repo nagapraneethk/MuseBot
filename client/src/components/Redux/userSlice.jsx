@@ -4,6 +4,10 @@ const initialState = {
 	name: "",
 	email: "",
 	phone: "",
+	language: {
+		language: "English",
+		code :'en'
+	}, 
 };
 
 const userSlice = createSlice({
@@ -13,8 +17,11 @@ const userSlice = createSlice({
 		updateUser: (state, action) => {
 			return { ...state, ...action.payload };
 		},
+		updateLanguage: (state, action) => {
+			state.language = action.payload;
+		},
 	},
 });
 
-export const { updateUser } = userSlice.actions;
+export const { updateUser, updateLanguage } = userSlice.actions; // Export updateLanguage
 export default userSlice.reducer;
