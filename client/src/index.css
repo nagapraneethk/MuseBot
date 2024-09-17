@@ -92,7 +92,445 @@
   }
   
   
+  /* Admin CSS */
+
+  .Admin-dashboard{
+    /* background-color: aqua; */
+display: flex;
+height: 100vh;
+justify-content: space-between;
+background-color:black;
+
+    /* z-index: -2; */
+  }
+
+  .Admin-sidenav{
+   height: 100vh;
+   width: 250px;
+   height: 95vh;
+   margin: auto;
+   border-radius: 7px;
+   border: 1px solid white;
+  }
+  .Admin-maincontent{
+    border-radius: 7px;
+    height: 95vh;
+    width: 82%;
+    margin: auto;
+    background-color: rgb(0,0,0);
+    backdrop-filter: blur(10px) ;
+    border:1px solid white;
+    padding: 15px;
+  }
+  .heading{
+    display: flex;
+    font-size: 40px;
+    color: white;
+    align-items: center;
+  }
+  .heading img{
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: .5%;
+  }
+  .heading h1{
+    margin-left: 8px;
+  }
+  .Admin-content{
+    /* border: 2px solid white; */
+    margin-top:5px;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+   
+  }
   
+.LeftBlock{
+  width: 65%;
+  height: 100%;
+  
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  /* border: 2px solid white; */
+}
+.RightBlock{
+  width: 25%;
+  height: 100%;
+  /* padding-left: 10px; */
+  /* background-color: aqua; */
+  /* border: 2px solid rgb(142, 39, 39); */
+}
+.ShowsBlock{
+  margin: 10px;
+ 
+  height: 35%;
+  color: white;
+  font-size: 20px;
   
 
+}
+.AnalyticsBlock{
+height: 60%;
+margin: 10px;
+/* border: 1px solid red; */
+}
+.AddShow{
+  width: 100%;
+  height: 53%;
+  margin: 7px;
+  border: 1px solid white;
+  border-radius: 8px;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   
+}
+.AddShow form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.ResentBlock{
+  color: white;
+  overflow-y: scroll;
+  height: 45%;
+  margin: 7px;
+  margin-top: 15px;
+  border: 1px solid white;
+  border-radius: 8px;
+  padding: 10px 20px;
+  -ms-overflow-style: none;  
+  scrollbar-width: none; 
+  width: 100%;
+  padding-top: 0px;
+}
+  
+
+.stop-btn {
+  background: #FF6B6B;
+  color: white;
+  border: none;
+  /* padding: 10px 20px; */
+  padding-top: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 7px;
+  height: 23px;
+}
+
+
+
+.booking-container {
+  background: #333; /* Dark grey background */
+  color: white; /* White text */
+  border-radius: 15px; /* Rounded corners */
+  padding: 10px;
+  width: 320px; /* Full width to accommodate the horizontal layout */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  font-family: Arial, sans-serif; /* Clean, modern font */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center-align content */
+  font-size: 12px;
+  margin: 15px;
+  margin-right: 50px;
+  
+
+}
+
+.times {
+  background-color: #212121;
+  display: flex; /* Using flexbox for horizontal layout */
+  width: 295px; /* Full width of container */
+  justify-content: space-around; /* Even spacing between time slots */
+  padding-bottom: 10px;
+  border-radius: 10px;
+}
+
+.time-slot {
+ 
+  border-radius: 10px; /* Rounded corners */
+  padding-top: 15px;
+  width: 35%; /* Adjust width to fit four slots on wide screens */
+  text-align: center; /* Center text */
+}
+
+.ShowTitle{
+  font-size: 20px;
+  align-self: flex-start;
+}
+.book-count{
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+.ShowSubTitle{
+  align-self: flex-start;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.times-hed{
+
+  margin-top: 10%;
+
+  font-size: 13px;
+}
+.times-hed p{
+  margin-left: 5px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+.slot-time{
+  width: 55px;
+}
+.show-list{
+  display: flex;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  
+  scrollbar-width: none; 
+  /* padding-bottom: 100px; */
+  /* margin-bottom: 10px; */
+}
+
+
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.tickets-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+ 
+}
+.tickets-count{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.tickets-count h1 {
+  font-size: 48px;
+  margin: 0;
+}
+
+.tickets-count p {
+  margin: 0;
+  font-size: 18px;
+}
+
+.most-active-regions{
+  border-left: 0.5px solid white;
+  padding-left: 50px;
+  margin: 15px;
+
+  width: 400px;
+}
+.most-active-regions h2 {
+  font-size: 24px;
+}
+
+.most-active-regions ol {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.most-active-regions ol li {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.region-1 {
+  color: yellow;
+}
+
+.region-2 {
+  color: silver;
+}
+
+.region-3 {
+  color: orange;
+}
+
+.shows-section {
+  display: flex;
+  justify-content: space-between;
+  border-top: 0.5px solid white;
+  padding-top: 10px;
+
+}
+.top-shows{
+
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.least-popular-shows{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-left: 0.5px solid white;
+}
+
+.top-shows, .least-popular-shows {
+  width: 45%;
+}
+
+.top-shows h3, .least-popular-shows h3 {
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+ul li {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.logo{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 1px solid white;
+  /* display: inline-block; */
+}
+.logo-sec{
+  margin: 10px;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+}
+.logo-sec h1{
+  margin-left: 10px;
+  color: white;
+  font-size: 20px;
+  
+  /* display: inline-block; */
+}
+.Admin-nav-ul{
+  margin: 50px 25px
+}
+
+.Admin-nav-ul li{
+  color: white;
+  margin-top: 30px;
+}
+
+.Admin-sidenav button{
+  position: fixed;
+  bottom: 70px;
+  border: 1px solid white;
+  width: 150px;
+  border-radius: 10px;
+  margin-left: 45px;
+  color: white;
+  text-align: center;
+}
+
+
+.AddShow input{
+background-color:black;
+outline: none;
+border-bottom: 2px solid white;
+margin: 5px;
+}
+#fileInput {
+  display: none; /* Hide the input element */
+}
+.AddShow form p{
+  display: inline-block;
+}
+
+label[for="fileInput"] {
+  
+  margin-top: 10px;
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #ccc;
+  color: #333;
+  border: 1px solid #999;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  left:10px
+}
+.AddShow h1{
+  font-size: 25px;
+  font-weight: 700;
+  text-align: center;
+}
+.AddShow p{
+  text-align: center;
+}
+
+.transaction-list h3{
+  font-size: 25px;
+  font-weight: 700;
+  text-align: center;
+  position: sticky;
+  top: 0px;
+  background-color: black;
+  /* padding-top: 0px; */
+}
+
+.transaction-list li {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.btw-left-right{
+  height: 70vh;
+  border: 1px solid white;
+
+}
+.btw-show-analytics{
+width: 70%;
+border: 1px solid white;
+position: relative;
+left: 13%;
+top: 3%;
+margin-top: 10px;
+
+}
+
+
+.banner-img{
+  width: 250px;
+}
+
+.submit-show{
+  border: 0.5px solid white;
+  padding: 5px 8px;
+  margin-top: 10px;
+  border-radius: 10px;
+
+}
