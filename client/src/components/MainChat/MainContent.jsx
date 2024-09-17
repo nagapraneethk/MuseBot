@@ -5,36 +5,73 @@ import MuseumBooking from "../MuseumBooking/MuseumBooking";
 import React from "react";
 import TicketCard from "../TicketGenerated/TicketCard";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react";
+import { useSelector } from "react-redux";
+import { translateText } from "../../utils/LanguageTranslation";
 
-const MainContent = ({ isOpen }) => {
+const MainContent = ({ isOpen, setTodoEvents }) => {
+	const [translatedText, setTranslatedText] = useState({});
 	const [inputText, setInputText] = useState("");
 	const [messages, setMessages] = useState([]);
-	const [eventDetailsSelected, seEventDetailsSelected] = useState([]);
+	const [eventDetailsSelected, setEventDetailsSelected] = useState([]);
 	const [userDetails, setUserDetails] = useState([]);
 	const messagesEndRef = useRef(null);
+	const language = useSelector((state) => state.user.language.code);
 
-	const handleSend = (messageText) => {
+	useEffect(() => {
+		console.log(language);
+		translatePage();
+	}, [language]);
+
+	const translatePage = async () => {
+		try {
+			const textToTranslate = {
+				greeting:
+					"Hello, in what ways can I help you? Kindly select one of the options below.",
+				signIn: "Sign In to Book Tickets",
+				bookTickets: "Book Tickets",
+				unsureResponse: "I'm not sure how to respond to that. Please checkout the shows available.",
+				availableShows: "Here are the available shows:",
+				proceedBooking: "Great! Let's proceed with your booking.",
+				confirmBooking:
+					"Great! Your ticket has been booked. Here are the details:",
+				inputPlaceholder: "Start booking your ticket",
+			};
+
+			const translatedTextObj = {};
+			for (const [key, value] of Object.entries(textToTranslate)) {
+				translatedTextObj[key] = await translateText(value, language);
+			}
+
+			setTranslatedText(translatedTextObj);
+		} catch (error) {
+			console.error("Translation error:", error);
+		}
+	};
+
+	const handleSend = async (messageText) => {
+		const translatedUserMessage = await translateText(
+			messageText || inputText,
+			language
+		);
 		setMessages((prevMessages) => [
 			...prevMessages,
-			{ sender: "user", text: messageText || inputText },
+			{ sender: "user", text: translatedUserMessage },
 		]);
 
-		setTimeout(() => {
-			if (messageText === "Book Tickets" || inputText === "Book Tickets") {
-				setMessages((prevMessages) => [
-					...prevMessages,
-					{ sender: "bot", text: "Here are the available shows:", id: 1 },
-				]);
-			} else {
-				setMessages((prevMessages) => [
-					...prevMessages,
-					{
-						sender: "bot",
-						text: "I'm not sure how to respond to that.",
-						id: 0,
-					},
-				]);
+		setTimeout(async () => {
+			let botResponse = translatedText.unsureResponse;
+
+			if (
+				messageText === translatedText.bookTickets ||
+				inputText === translatedText.bookTickets
+			) {
+				botResponse = translatedText.availableShows;
 			}
+
+			setMessages((prevMessages) => [
+				...prevMessages,
+				{ sender: "bot", text: botResponse, id: 1 },
+			]);
 		}, 1000);
 
 		setInputText("");
@@ -44,45 +81,53 @@ const MainContent = ({ isOpen }) => {
 		handleSend(text);
 	};
 
-	const handleBooking = (eventDetails) => {
-		seEventDetailsSelected(eventDetails);
+	const handleBooking = async (eventDetails) => {
+		setEventDetailsSelected(eventDetails);
+		
+
+		let translatedUserMessage = await translateText(
+			"I'd like to book tickets for ",
+			language
+		);
+		translatedUserMessage += `"${eventDetails.title}"`;
+
 		setMessages((prevMessages) => [
 			...prevMessages,
-			{
-				sender: "user",
-				text: `I'd like to book tickets for "${eventDetails.title}"`,
-			},
+			{ sender: "user", text: translatedUserMessage },
 		]);
+
 		setTimeout(() => {
 			setMessages((prevMessages) => [
 				...prevMessages,
 				{
 					sender: "bot",
-					text: "Great! Let's proceed with your booking.",
+					text: translatedText.proceedBooking,
 					id: 2,
 					eventDetails: eventDetails,
 				},
 			]);
 		}, 1000);
 	};
-	const handleTicketBooking = (ticketDetails) => {
-		console.log("props", ticketDetails);
+
+	const handleTicketBooking = async (ticketDetails) => {
 		setUserDetails(ticketDetails);
+		setTodoEvents(ticketDetails);
+		let translatedUserMessage = await translateText(
+			`I'd like to confirm the ticket for `,
+			language
+		);
+		translatedUserMessage += `"${eventDetailsSelected.title}"`;
 		setMessages((prevMessages) => [
 			...prevMessages,
-			{
-				sender: "user",
-				text: `I'd like to confirm the ticket for "${
-					eventDetailsSelected?.title || "Ticket Dummy"
-				}"`,
-			},
+			{ sender: "user", text: translatedUserMessage },
 		]);
+
 		setTimeout(() => {
 			setMessages((prevMessages) => [
 				...prevMessages,
 				{
 					sender: "bot",
-					text: "Great! Your ticket has been booked. Here are the details:",
+					text: translatedText.confirmBooking,
 					id: 3,
 					ticketDetails: ticketDetails,
 				},
@@ -108,25 +153,23 @@ const MainContent = ({ isOpen }) => {
 	return (
 		<div
 			className={`flex flex-col ${
-				isOpen ? "w-[75%]" : "w-[94%]"
+				isOpen ? "w-[78%]" : "w-[94%]"
 			} max-md:ml-0 max-md:w-full fixed top-6 right-6`}
 		>
 			<div className='chat-box flex flex-col px-4 py-5 mx-auto w-full rounded-3xl bg-zinc-800 max-md:pr-5 max-md:mt-10 max-md:max-w-full h-[95vh] relative'>
-			
 				<Header />
 				<div className='h-[72vh] overflow-y-auto'>
 					<div className='flex flex-wrap gap-5 justify-between mt-3 text-white max-md:max-w-full'>
 						<div className='flex flex-col'>
 							<div className='flex flex-col items-start px-5 pt-5 pb-4 w-full text-xs font-semibold rounded-3xl bg-neutral-700 max-md:ml-2.5 rounded-tl-[2px] '>
 								<div className='text-base font-medium max-w-52 '>
-									Hello, in what ways can I help you? Kindly select one of the
-									options below.
+									{translatedText.greeting}
 								</div>
 								<div className='grid grid-cols-2 gap-4 mt-4'>
 									<SignedOut>
 										<SignInButton mode='modal'>
 											<button className='px-5 py-4 rounded-md shadow-sm bg-zinc-800 max-md:pr-5'>
-												Sign In to Book Tickets
+												{translatedText.signIn}
 											</button>
 										</SignInButton>
 									</SignedOut>
@@ -134,9 +177,11 @@ const MainContent = ({ isOpen }) => {
 									<SignedIn>
 										<button
 											className='px-5 py-4 rounded-md shadow-sm bg-zinc-800 max-md:pr-5'
-											onClick={() => handleButtonClick("Book Tickets")}
+											onClick={() =>
+												handleButtonClick(translatedText.bookTickets)
+											}
 										>
-											Book Tickets
+											{translatedText.bookTickets}
 										</button>
 									</SignedIn>
 								</div>
@@ -217,9 +262,15 @@ const MainContent = ({ isOpen }) => {
 					<input
 						type='text'
 						className='px-4 py-4 bg-neutral-600 bg-opacity-50 rounded-[30px] max-md:px-5 flex-grow text-white'
-						placeholder='Start booking your ticket'
+						placeholder={translatedText.inputPlaceholder}
 						value={inputText}
 						onChange={(e) => setInputText(e.target.value)}
+					/>
+					<img
+						loading='lazy'
+						src='/mic2.svg'
+						alt='Send message'
+						className='object-contain w-12 aspect-square'
 					/>
 					<button type='submit' className='flex-shrink-0'>
 						<img

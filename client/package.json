@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.8.2",
+    "@google-cloud/translate": "^8.5.0",
     "@reduxjs/toolkit": "^2.2.7",
+    "dotenv": "^16.4.5",
     "lucide-react": "^0.441.0",
     "qrcode.react": "^4.0.1",
     "react": "^18.3.1",

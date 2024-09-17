@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 
 function BookingForm({ user, date, selectedTime, onTicketBook }) {
-	const storedProfile = JSON.parse(localStorage.getItem("userProfile"));
+	const [bookingStep, setBookingStep] = useState("form");
 	const [formData, setFormData] = useState({
 		persons: "",
 		mobile: "",
@@ -28,27 +28,32 @@ function BookingForm({ user, date, selectedTime, onTicketBook }) {
 	};
 
 	const handleAddFromProfile = () => {
+		const storedProfile = JSON.parse(localStorage.getItem("userProfile"));
 		if (user) {
 			setFormData((prevData) => ({
 				...prevData,
-				mobile: user.primaryPhoneNumber?.phoneNumber || "1234567890",
+				mobile: user.primaryPhoneNumber?.phoneNumber || "",
 				email:
-					storedProfile?.email || "user@example.com",
+					storedProfile?.email || user.primaryEmailAddress?.emailAddress || "",
 			}));
 		}
 	};
 
- const handleSubmit = (e) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log("Form submitted:", formData);
-		onTicketBook({ ...formData });
- };
+		setBookingStep("payment");
+	};
 
-	return (
-		<form
-			onSubmit={handleSubmit}
-			className='relative self-end mt-9 w-full max-w-[404px]'
-		>
+	const handlePaymentConfirmation = () => {
+		setBookingStep("processing");
+		// Simulate payment processing
+		setTimeout(() => {
+			setBookingStep("thanks");
+		}, 2000);
+	};
+
+	const renderFormStep = () => (
+		<>
 			<div className='flex gap-5 max-md:flex-col'>
 				<div className='flex flex-col w-[58%] max-md:ml-0 max-md:w-full'>
 					<div className='flex relative flex-col w-full text-xs font-medium text-white max-md:mt-3'>
@@ -133,6 +138,7 @@ function BookingForm({ user, date, selectedTime, onTicketBook }) {
 							Add details from Profile
 						</button>
 						<button
+							onClick={handleSubmit}
 							type='submit'
 							className='self-center px-7 py-2.5 mt-3 text-sm whitespace-nowrap rounded-2xl border border-solid border-zinc-300 border-opacity-80 text-zinc-300 hover:bg-zinc-700 transition-colors w-[94px] max-md:px-5'
 						>
@@ -140,7 +146,52 @@ function BookingForm({ user, date, selectedTime, onTicketBook }) {
 						</button>
 					</div>
 				</div>
+				
 			</div>
+		</>
+	);
+
+	const renderPaymentStep = () => (
+		<div className='flex flex-col items-center'>
+			<p className='text-white mb-4'>Proceed to payment</p>
+			<button
+				onClick={handlePaymentConfirmation}
+				className='px-7 py-2.5 text-sm whitespace-nowrap rounded-2xl border border-solid border-zinc-300 border-opacity-80 text-zinc-300 hover:bg-zinc-700 transition-colors'
+			>
+				Confirm Payment
+			</button>
+		</div>
+	);
+
+	const renderProcessingStep = () => (
+		<div className='flex flex-col items-center'>
+			<p className='text-white mb-4'>
+				Redirecting you to the payment gateway...please wait
+			</p>
+		</div>
+	);
+
+	const renderThanksStep = () => (
+		<div className='flex flex-col items-center'>
+			<p className='text-white mb-4'>Thank you for your booking!</p>
+			<button
+				onClick={(e) => {
+					e.preventDefault();
+					onTicketBook(formData);
+				}}
+				className='px-7 py-2.5 text-sm whitespace-nowrap rounded-2xl border border-solid border-zinc-300 border-opacity-80 text-zinc-300 hover:bg-zinc-700 transition-colors'
+			>
+				View Ticket
+			</button>
+		</div>
+	);
+
+	return (
+		<form className='relative self-end mt-9 w-full max-w-[404px]'>
+			{bookingStep === "form" && renderFormStep()}
+			{bookingStep === "payment" && renderPaymentStep()}
+			{bookingStep === "processing" && renderProcessingStep()}
+			{bookingStep === "thanks" && renderThanksStep()}
 		</form>
 	);
 }
