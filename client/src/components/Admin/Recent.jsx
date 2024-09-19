@@ -7,8 +7,8 @@ import React, { useState } from 'react';
         const [amounts, setAmounts] = useState(transactions.map(tx => tx.amount));
     return (
         <main className='ResentBlock'>
-           <div className="transaction-list">
       <h3>Recent Transactions</h3>
+           <div className="transaction-list">
       <ul>
         {transactions.map((tx, index) => (
           <li key={index}>

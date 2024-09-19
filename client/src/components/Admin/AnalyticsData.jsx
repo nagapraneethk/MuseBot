@@ -3,10 +3,12 @@ import React from "react";
 
 const Dashboard = ({ ticketsCount, regions, topShows, leastPopularShows }) => {
   return (
+    
     <div className="dashboard-container">
+      
       <div className="tickets-section">
         <div className="tickets-count">
-          <h1>{ticketsCount}+</h1>
+          <h1 className="booking-count">{ticketsCount}+</h1>
           <p>TICKETS BOOKED</p>
         </div>
          
