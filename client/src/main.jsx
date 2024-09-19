@@ -7,6 +7,8 @@ import { ClerkProvider } from '@clerk/clerk-react';
 import { store } from './components/Redux/store.jsx'
 import { Provider } from 'react-redux'
 
+
+
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {

@@ -12,7 +12,7 @@ const SideNav = () => {
 				<ul className='Admin-nav-ul'>
 					<li>Dashboard</li>
 					<li>Shows</li>
-					<li>Dasboard</li>
+					<li>Museums</li>
 				</ul>
 				<button>Logout</button>
 			</main>

@@ -17,6 +17,7 @@ const AnalyticsBlock = () => {
 
     return (
         <main className='AnalyticsBlock'>
+          <h1 className='analytics-hed'>Analytics</h1>
 
 <Dashboard
         ticketsCount={0}
